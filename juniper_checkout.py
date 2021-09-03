@@ -23,4 +23,6 @@ with serial.Serial("COM5", timeout=1) as ser:
     send_to_console(ser, "show chassis environment", wait_time=2)
     send_to_console(ser, "show chassis fpc")
     send_to_console(ser, "show chassis fpc pic-status")
+    send_to_console(ser, "exit")
+    send_to_console(ser, "exit")
     print(f"Connection to {ser.name} closed.")
