@@ -15,8 +15,8 @@ def send_to_console(ser: serial.Serial, command: str, wait_time: float = 0.5):
 with serial.Serial("COM5", timeout=1) as ser:
     print(f"Connecting to {ser.name}...")
     send_to_console(ser, "")
-    send_to_console(ser, "root")
-    send_to_console(ser, "tekAdminTools")
+    send_to_console(ser, "username")
+    send_to_console(ser, "pw")
     send_to_console(ser, "cli")
     send_to_console(ser, "show version", wait_time=2)
     send_to_console(ser, "show chassis hardware", wait_time=2)
