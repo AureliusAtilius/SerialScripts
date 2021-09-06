@@ -1,0 +1,5 @@
+show version
+show chassis hardware
+show chassis environment
+show chassis fpc
+show chassis fpc pic-status
