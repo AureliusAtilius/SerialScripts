@@ -1,6 +1,6 @@
 #! usr/bin/env python
 import serial
-from serial.serialutil import STOPBITS_ONE
+from serial.serialutil import STOPBITS_ONE, SerialBase, SerialException
 from time import sleep
  
  
@@ -24,24 +24,42 @@ def send_command_write(ser: serial.Serial, vendor, filename, wait_time: float = 
     with open(filename,"a+") as file:
         file.write(output)
 
-
+def show_serial_ports():
+    ports = serial.tools.list_ports.comports()
+    for port, desc, hwid in sorted(ports):
+            print("{}: {}".format(port, desc))
 def main():
     vendors={"1":"Juniper","2":"Cisco","3":"HPE","4":"Dell"}
+    baud_rates={"Juniper":9600,"Cisco":9600,"HPE":1200, "Dell":9600}
     while True:
         vendor=input("Select Vendor(1-4): \n1.Juniper \n2.Cisco \n3.HPE \n4.Dell\n")
         if vendor not in vendors.keys():
             continue
         else:
             break
+
+    while True:
+        available_coms=show_serial_ports()
+        com=input("\nSelect COM port number: \n")
+        if com.isnumeric():
+            break
+        else:
+            continue
     file_name=input("Checkout File Name: \n") 
-    with serial.Serial("COM5", timeout=1) as ser:
-        print(f"Connecting to {ser.name}...")
-        send_command(ser, "")
-        login(vendors[vendor])
-        send_command_write(ser, vendors[vendor],file_name,wait_time=2)
-        send_command(ser, "exit")
-        send_command(ser, "exit")
-        print(f"Connection to {ser.name} closed.")
+    try:
+        with serial.Serial("COM5", timeout=1) as ser:
+            print(f"Connecting to {ser.name}...")
+            send_command(ser, "")
+            login(vendors[vendor])
+            send_command_write(ser, vendors[vendor],file_name,wait_time=2)
+            send_command(ser, "exit")
+            send_command(ser, "exit")
+            print(f"Connection to {ser.name} closed.")
+    except SerialException:
+        print("Unable to reach device. Please select a connected device.")
+    except ValueError:
+        print("Incorrect parameters. Unable to connect.")
+
 
 
 if __name__=="__main__":
