@@ -1,0 +1,6 @@
+terminal length 0
+show version
+show environment all
+show diagnostic content
+show inventory raw
+show platform status
