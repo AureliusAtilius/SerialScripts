@@ -7,17 +7,21 @@ from time import sleep
  
 def send_command(ser: serial.Serial, command: str, wait_time: float = 1):
     command_to_send = command + "\r"
+    print(".")
     ser.write(command_to_send.encode('utf-8'))
     sleep(wait_time)
-    print(ser.read(ser.inWaiting()).decode('utf-8'), end="")
+    #print(ser.read(ser.inWaiting()).decode('utf-8'), end="")
 
 def login(ser: serial.Serial,vendor):
     with open("{}\\default_login.txt".format(vendor),"r")as file:
         for line in file:
             send_command(ser,line)
-            sleep(2)
+            sleep(1)
+            output=(ser.read(ser.inWaiting()).decode('utf-8'))
+            
+    
 
-def send_command_write(ser: serial.Serial, vendor, filename, wait_time: float = 0.5):
+def send_command_write(ser: serial.Serial, vendor, filename, wait_time: float = 2):
     with open('{}\\checkout.txt'.format(vendor),"r") as commands:
         for line in commands:
             send_command(ser, line)
@@ -49,14 +53,14 @@ def main():
             continue
     file_name=input("Checkout File Name: \n")+".txt" 
     try:
-        with serial.Serial("COM5", timeout=1) as ser:
+        with serial.Serial("COM5", timeout=None) as ser:
             print(f"Connecting to {ser.name}...")
             send_command(ser, command="")
             login(ser, vendors[vendor])
             send_command_write(ser, vendors[vendor],file_name,wait_time=2)
             send_command(ser, "exit")
             send_command(ser, "exit")
-            print(f"Connection to {ser.name} closed.")
+            print(f"Session complete! \nConnection to {ser.name} closed.")
     except SerialException:
         print("Unable to reach device. Please select a connected device.")
     except ValueError:
