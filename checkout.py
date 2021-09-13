@@ -33,7 +33,8 @@ def send_command_write(ser: serial.Serial, vendor, filename, wait_time: float = 
 def show_serial_ports():
     ports = serial.tools.list_ports.comports()
     for port, desc, hwid in sorted(ports):
-            print("{}: {}".format(port, desc))
+        print("{}: {}".format(port, desc))
+    
 def main():
     vendors={"1":"Juniper","2":"Cisco","3":"HPE","4":"Dell"}
     baud_rates={"Juniper":9600,"Cisco":9600,"HPE":1200, "Dell":9600}
@@ -43,7 +44,7 @@ def main():
             continue
         else:
             break
-
+    baudrate=baud_rates[vendors[vendor]]
     while True:
         available_coms=show_serial_ports()
         com=input("\nSelect COM port number: \n")
@@ -53,7 +54,9 @@ def main():
             continue
     file_name=input("Checkout File Name: \n")+".txt" 
     try:
-        with serial.Serial("COM5", timeout=None) as ser:
+
+
+        with serial.Serial("COM"+com,baudrate,timeout=1) as ser:
             print(f"Connecting to {ser.name}...")
             send_command(ser, command="")
             login(ser, vendors[vendor])
