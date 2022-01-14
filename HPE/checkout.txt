@@ -1,0 +1,7 @@
+show version
+show flash
+show system information
+sshow power-over-ethernet 
+show log
+logout
+y

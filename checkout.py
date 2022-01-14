@@ -5,7 +5,7 @@ from serial.serialutil import STOPBITS_ONE, SerialBase, SerialException
 from time import sleep
  
  
-def send_command(ser: serial.Serial, command: str, wait_time: float = 1):
+def send_command(ser: serial.Serial, command: str, wait_time: float = 3):
     command_to_send = command + "\r"
     print(".")
     ser.write(command_to_send.encode('utf-8'))
@@ -21,7 +21,7 @@ def login(ser: serial.Serial,vendor):
             
     
 
-def send_command_write(ser: serial.Serial, vendor, filename, wait_time: float = 2):
+def send_command_write(ser: serial.Serial, vendor, filename, wait_time: float = 3):
     with open('{}\\checkout.txt'.format(vendor),"r") as commands:
         for line in commands:
             send_command(ser, line)
@@ -37,7 +37,7 @@ def show_serial_ports():
     
 def main():
     vendors={"1":"Juniper","2":"Cisco","3":"HPE","4":"Dell"}
-    baud_rates={"Juniper":9600,"Cisco":9600,"HPE":1200, "Dell":9600}
+    baud_rates={"Juniper":9600,"Cisco":9600,"HPE":115100, "Dell":9600}
     while True:
         vendor=input("Select Vendor(1-4): \n1.Juniper \n2.Cisco \n3.HPE \n4.Dell\n")
         if vendor not in vendors.keys():
@@ -56,11 +56,14 @@ def main():
     try:
 
 
-        with serial.Serial("COM"+com,baudrate,timeout=1) as ser:
+        with serial.Serial("COM"+com,baudrate,timeout=2 ) as ser:
             print(f"Connecting to {ser.name}...")
-            send_command(ser, command="")
+            send_command(ser, command=" ")
+            send_command(ser, command=" ")
+            send_command(ser, command=" ")
+            send_command(ser, command=" ")
             login(ser, vendors[vendor])
-            send_command_write(ser, vendors[vendor],file_name,wait_time=2)
+            send_command_write(ser, vendors[vendor],file_name,wait_time=5)
             send_command(ser, "exit")
             send_command(ser, "exit")
             print(f"Session complete! \nConnection to {ser.name} closed.")

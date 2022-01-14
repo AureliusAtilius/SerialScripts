@@ -1,4 +1,5 @@
-terminal length 0
+\r
+terminal length 1000
 show version
 show environment all
 show diagnostic content
