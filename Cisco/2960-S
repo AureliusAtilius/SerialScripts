@@ -1,0 +1,5 @@
+terminal length 0
+show version
+show env all
+show diagnostic content switch all
+show inventory raw

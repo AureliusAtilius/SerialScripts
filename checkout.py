@@ -59,9 +59,6 @@ def main():
         with serial.Serial("COM"+com,baudrate,timeout=2 ) as ser:
             print(f"Connecting to {ser.name}...")
             send_command(ser, command=" ")
-            send_command(ser, command=" ")
-            send_command(ser, command=" ")
-            send_command(ser, command=" ")
             login(ser, vendors[vendor])
             send_command_write(ser, vendors[vendor],file_name,wait_time=5)
             send_command(ser, "exit")
