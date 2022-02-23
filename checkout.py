@@ -13,11 +13,14 @@ def send_command(ser: serial.Serial, command: str, wait_time: float = 3):
     #print(ser.read(ser.inWaiting()).decode('utf-8'), end="")
 
 def login(ser: serial.Serial,vendor):
-    with open("{}\\default_login.txt".format(vendor),"r")as file:
-        for line in file:
-            send_command(ser,line)
-            sleep(1)
-            output=(ser.read(ser.inWaiting()).decode('utf-8'))
+    try:
+        with open("{}\\default_login.txt".format(vendor),"r")as file:
+            for line in file:
+                send_command(ser,line)
+                sleep(1)
+                output=(ser.read(ser.inWaiting()).decode('utf-8'))
+    except:
+        pass 
             
     
 
@@ -36,10 +39,10 @@ def show_serial_ports():
         print("{}: {}".format(port, desc))
     
 def main():
-    vendors={"1":"Juniper","2":"Cisco","3":"HPE","4":"Dell"}
-    baud_rates={"Juniper":9600,"Cisco":9600,"HPE":115100, "Dell":9600}
+    vendors={"1":"Juniper","2":"Cisco","3":"HPE","4":"Dell","5":"Aruba"}
+    baud_rates={"Juniper":9600,"Cisco":9600,"HPE":115100, "Dell":9600, "Aruba":115200}
     while True:
-        vendor=input("Select Vendor(1-4): \n1.Juniper \n2.Cisco \n3.HPE \n4.Dell\n")
+        vendor=input("Select Vendor(1-4): \n1.Juniper \n2.Cisco \n3.HPE \n4.Dell\n 5.Aruba \n")
         if vendor not in vendors.keys():
             continue
         else:

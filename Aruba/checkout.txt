@@ -1,0 +1,5 @@
+show version
+show system
+show power-over-ethernet
+enable 
+show logging
